@@ -4,7 +4,7 @@
   "description": "API for course Project",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon main.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/Roman4iks/API-Course#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "nodemon": "^3.0.2",
     "pg": "^8.11.3"
   }
 }
