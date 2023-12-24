@@ -1,34 +1,36 @@
 
 require('dotenv').config();
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-
-const db = require('./db')
-
-const getUsers = (request, response) => {
-  db.query('SELECT * FROM "Members" ORDER BY members_id ASC', (error, results) => {
-    if (error) {
-      throw error
-    }
-    response.status(200).json(results.rows)
-  })
-}
 
 
-app.use(bodyParser.json())
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-  )
-  
-app.get('/', (request, response) => {
-      response.json({ info: 'Node.js, Express, and Postgres API' })
-    })
-    
-app.get('/members', getUsers)
+const express = require('express');
+const eventsRoutes = require('./src/routes/eventsRoutes');
+const membersRoutes = require('./src/routes/membersRoutes');
+const eventsParticipantsRoutes = require('./src/routes/eventsParticipants');
+const partiesRoutes = require('./src/routes/partiesRoutes');
+const positionsRoutes = require('./src/routes/positionsRoutes');
+const authRoutes = require('./src/routes/authRoutes');
+const usersRoutes = require('./src/routes/usersRoutes');
+const secureRoutes = require('./src/routes/secureRoutes');
+const complexRoutes = require('./src/routes/complexRoutes');
+const { authenticateToken } = require('./src/middleware/authMiddleware');
+const { handleDatabaseError } = require('./src/middleware/errorMiddleware');
+
+const app = express();
+
+app.use(express.json());
+
+app.use('/api', usersRoutes);
+app.use('/api', authRoutes);
+
+app.use('/api', authenticateToken, eventsRoutes);
+// app.use('/api', membersRoutes);
+// app.use('/api', eventsParticipantsRoutes);
+// app.use('/api', partiesRoutes);
+// app.use('/api', positionsRoutes);
+// app.use('/api', complexRoutes);
+
+app.use(handleDatabaseError);
 
 app.listen(process.env.PORT, () => {
   console.log(`App running on port ${process.env.PORT}.`)
-})
+});
