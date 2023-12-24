@@ -6,7 +6,6 @@ const express = require('express');
 const eventsRoutes = require('./src/routes/eventsRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const usersRoutes = require('./src/routes/usersRoutes');
-const secureRoutes = require('./src/routes/secureRoutes');
 const complexRoutes = require('./src/routes/complexRoutes');
 const { authenticateToken } = require('./src/middleware/authMiddleware');
 const { handleDatabaseError } = require('./src/middleware/errorMiddleware');
