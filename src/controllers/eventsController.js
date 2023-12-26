@@ -132,8 +132,6 @@ function validateEventAndDateFields(req, res, callback) {
   });
 }
 
-function handleQueryError(res, error) {}
-
 module.exports = {
   getAllEvents,
   getEventById,
