@@ -7,8 +7,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const usersRoutes = require('./src/routes/usersRoutes');
 const eventsRoutes = require('./src/routes/eventsRoutes');
 const memmberRoutes = require('./src/routes/membersRoutes');
-const complexRoutes = require('./src/routes/complexRoutes');
-const { authenticateToken } = require('./src/middleware/authMiddleware');
+const partiesRoutes = require('./src/routes/partiesRoutes');
 const { handleDatabaseError } = require('./src/middleware/errorMiddleware');
 
 const app = express();
@@ -20,8 +19,8 @@ app.use('/api', authRoutes);
 
 app.use('/api', eventsRoutes);
 app.use('/api', memmberRoutes);
+app.use('/api', partiesRoutes);
 // app.use('/api', eventsParticipantsRoutes);
-// app.use('/api', partiesRoutes);
 // app.use('/api', positionsRoutes);
 // app.use('/api', complexRoutes);
 
