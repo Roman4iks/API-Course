@@ -21,8 +21,6 @@ const validateEventFields = validateRequiredFields([
 const validateDateFields = validateDateFormat(["date_of_birth"]);
 const validateDateRangeFields = validateDateRange("date_of_birth", "date_now");
 
-
-
 async function getAllMembers  (req, res) {
   try {
     const client = await pool.connect();
@@ -36,7 +34,7 @@ async function getAllMembers  (req, res) {
   }
 }
 
-async function getMember (req, res) {
+async function getMemberById (req, res) {
   const memberId = req.params.id;
 
   try {
@@ -82,6 +80,54 @@ async function createMember(req, res) {
   });
 }
 
+async function updateMember(req, res) {
+    req.body['date_now'] = new Date()
+  const memberId = req.params.id;
+  validateEventAndDateFields(req, res, async () => {
+    const { party_id, first_name, second_name, surname, date_of_birth, address, email, phone, position_id } = req.body;
+
+    try {
+      const client = await pool.connect();
+      const result = await client.query(
+        'UPDATE public."Members" SET first_name = $1, second_name = $2, surname = $3, date_of_birth = $4, address = $5, email = $6, phone = $7, position_id = $8, party_id = $9 WHERE members_id = $10 RETURNING *',
+        [first_name, second_name, surname, date_of_birth, address, email, phone, position_id, party_id, memberId]
+      );
+      const updatedMember = result.rows[0];
+      client.release();
+
+      if(!updatedMember){
+        return res.status(401).json({ error: "Result failed" });
+      }
+
+      res.json(updatedMember);
+    } catch (error) {
+        handleDatabaseError(error, req, res);
+    }
+  });
+}
+
+async function deleteMember(req, res) {
+  const memberId = req.params.id;
+
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      'DELETE FROM public."Members" WHERE members_id = $1 RETURNING *',
+      [memberId]
+    );
+    const deletedMember = result.rows[0];
+    client.release();
+
+    if (!deletedMember) {
+        res.status(404).send("Member not found");
+    } else {
+        res.json(deletedMember);
+    }
+  } catch (error) {
+    handleDatabaseError(error, req, res)
+  }
+}
+
 function validateEventAndDateFields(req, res, callback) {
   validateEventFields(req, res, () => {
     validateDateFields(req, res, () => {
@@ -91,7 +137,9 @@ function validateEventAndDateFields(req, res, callback) {
 }
 
 module.exports = {
-    getMember,
     getAllMembers,
-    createMember
+    getMemberById,
+    createMember,
+    deleteMember,
+    updateMember
 }
