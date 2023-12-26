@@ -22,7 +22,7 @@ app.use(express.json());
 app.use('/api', usersRoutes);
 app.use('/api', authRoutes);
 
-app.use('/api', authenticateToken, eventsRoutes);
+app.use('/api', eventsRoutes);
 // app.use('/api', membersRoutes);
 // app.use('/api', eventsParticipantsRoutes);
 // app.use('/api', partiesRoutes);
