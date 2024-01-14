@@ -8,7 +8,7 @@ async function createUser(req, res) {
 
     const client = await pool.connect();
     const result = await client.query(
-      'INSERT INTO public."Users" (email, password, username) VALUES ($1, $2, $3) RETURNING *',
+      'INSERT INTO public."users" (email, password, username) VALUES ($1, $2, $3) RETURNING *',
       [email, hashedPassword, username]
     );
     const newUser = result.rows[0];

@@ -21,7 +21,7 @@ const validateDateRangeFields = validateDateRange("date_start", "date_end");
 async function getAllEvents(req, res) {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public."Events"');
+    const result = await client.query('SELECT * FROM public."events"');
     const events = result.rows;
     client.release();
 
@@ -37,7 +37,7 @@ async function getEventById(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'SELECT * FROM public."Events" WHERE event_id = $1',
+      'SELECT * FROM public."events" WHERE event_id = $1',
       [eventId]
     );
     const event = result.rows[0];
@@ -60,7 +60,7 @@ async function createEvent(req, res) {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'INSERT INTO public."Events" (name, date_start, date_end, location, description) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        'INSERT INTO public."events" (name, date_start, date_end, location, description) VALUES ($1, $2, $3, $4, $5) RETURNING *',
         [name, date_start, date_end, location, description]
       );
       const newEvent = result.rows[0];
@@ -89,7 +89,7 @@ async function updateEvent(req, res) {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'UPDATE public."Events" SET name = $1, date_start = $2, date_end = $3, location = $4, description = $5 WHERE event_id = $6 RETURNING *',
+        'UPDATE public."events" SET name = $1, date_start = $2, date_end = $3, location = $4, description = $5 WHERE event_id = $6 RETURNING *',
         [name, date_start, date_end, location, description, eventId]
       );
       const updatedEvent = result.rows[0];
@@ -108,7 +108,7 @@ async function deleteEvent(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'DELETE FROM public."Events" WHERE event_id = $1 RETURNING *',
+      'DELETE FROM public."events" WHERE event_id = $1 RETURNING *',
       [eventId]
     );
     const deletedEvent = result.rows[0];

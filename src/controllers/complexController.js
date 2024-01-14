@@ -8,7 +8,7 @@ async function getMembersOfEvent(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'SELECT m.* FROM public."Members" m INNER JOIN public."EventsParticipants" ep ON m.members_id = ep.member_id WHERE ep.event_id = $1',
+      'SELECT m.* FROM public."Members" m INNER JOIN public."eventsparticipants" ep ON m.members_id = ep.member_id WHERE ep.event_id = $1',
       [eventId]
     );
     const members = result.rows;
@@ -32,7 +32,7 @@ async function getEventsOfMember(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'SELECT e.* FROM public."Events" e INNER JOIN public."EventsParticipants" ep ON e.event_id = ep.event_id WHERE ep.member_id = $1',
+      'SELECT e.* FROM public."Events" e INNER JOIN public."eventsparticipants" ep ON e.event_id = ep.event_id WHERE ep.member_id = $1',
       [memberId]
     );
     const events = result.rows;

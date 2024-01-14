@@ -24,7 +24,7 @@ const validateDateRangeFields = validateDateRange("date_of_birth", "date_now");
 async function getAllMembers  (req, res) {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public."Members"');
+    const result = await client.query('SELECT * FROM public."members"');
     const members = result.rows;
     client.release();
 
@@ -40,7 +40,7 @@ async function getMemberById (req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'SELECT * FROM public."Members" WHERE members_id = $1',
+      'SELECT * FROM public."members" WHERE members_id = $1',
       [memberId]
     );
     const member = result.rows[0];
@@ -63,7 +63,7 @@ async function createMember(req, res) {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'INSERT INTO public."Members" (party_id, first_name, second_name, surname, date_of_birth, address, email, phone, position_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+        'INSERT INTO public."members" (party_id, first_name, second_name, surname, date_of_birth, address, email, phone, position_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
         [party_id, first_name, second_name, surname, date_of_birth, address, email, phone, position_id] 
       );
       const newMember = result.rows[0];
@@ -89,7 +89,7 @@ async function updateMember(req, res) {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'UPDATE public."Members" SET first_name = $1, second_name = $2, surname = $3, date_of_birth = $4, address = $5, email = $6, phone = $7, position_id = $8, party_id = $9 WHERE members_id = $10 RETURNING *',
+        'UPDATE public."members" SET first_name = $1, second_name = $2, surname = $3, date_of_birth = $4, address = $5, email = $6, phone = $7, position_id = $8, party_id = $9 WHERE members_id = $10 RETURNING *',
         [first_name, second_name, surname, date_of_birth, address, email, phone, position_id, party_id, memberId]
       );
       const updatedMember = result.rows[0];
@@ -112,7 +112,7 @@ async function deleteMember(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'DELETE FROM public."Members" WHERE members_id = $1 RETURNING *',
+      'DELETE FROM public."members" WHERE members_id = $1 RETURNING *',
       [memberId]
     );
     const deletedMember = result.rows[0];

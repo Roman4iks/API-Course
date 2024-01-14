@@ -6,7 +6,7 @@ async function login(req, res) {
   const { email, password } = req.body;
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public."Users" WHERE email = $1', [email]);
+    const result = await client.query('SELECT * FROM public."users" WHERE email = $1', [email]);
     const user = result.rows[0];
     client.release();
 

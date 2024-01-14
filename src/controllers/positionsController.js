@@ -3,7 +3,7 @@ const pool = require('../utils/pool');
 async function getAllPositions(req, res) {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public."Positions"');
+    const result = await client.query('SELECT * FROM public."positions"');
     const positions = result.rows;
     client.release();
 
@@ -19,7 +19,7 @@ async function getPositionById(req, res) {
 
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public."Positions" WHERE position_id = $1', [positionId]);
+    const result = await client.query('SELECT * FROM public."positions" WHERE position_id = $1', [positionId]);
     const position = result.rows[0];
     client.release();
 
@@ -40,7 +40,7 @@ async function createPosition(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'INSERT INTO public."Positions" (name, description) VALUES ($1, $2) RETURNING *',
+      'INSERT INTO public."positions" (name, description) VALUES ($1, $2) RETURNING *',
       [name, description]
     );
     const newPosition = result.rows[0];

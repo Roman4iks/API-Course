@@ -20,7 +20,7 @@ const validateDateRangeFields = validateDateRange("founded", "date_now");
 async function getAllParties (req, res) {
   try {
     const client = await pool.connect();
-    const result = await client.query('SELECT * FROM public."Parties"');
+    const result = await client.query('SELECT * FROM public."parties"');
     const party = result.rows;
     client.release();
 
@@ -36,7 +36,7 @@ async function getPartyById (req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'SELECT * FROM public."Parties" WHERE party_id = $1',
+      'SELECT * FROM public."parties" WHERE party_id = $1',
       [partyId]
     );
     const party = result.rows[0];
@@ -59,7 +59,7 @@ async function createParty(req, res) {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'INSERT INTO public."Parties" ( name, founded ) VALUES ($1, $2) RETURNING *',
+        'INSERT INTO public."parties" ( name, founded ) VALUES ($1, $2) RETURNING *',
         [name, founded] 
       );
       const newParty = result.rows[0];
@@ -85,7 +85,7 @@ async function updateParty(req, res) {
     try {
       const client = await pool.connect();
       const result = await client.query(
-        'UPDATE public."Parties" SET name = $1, founded = $2 WHERE party_id = $3 RETURNING *',
+        'UPDATE public."parties" SET name = $1, founded = $2 WHERE party_id = $3 RETURNING *',
         [name, founded, partyId]
       );
       const updatedParty = result.rows[0];
@@ -108,7 +108,7 @@ async function deleteParty(req, res) {
   try {
     const client = await pool.connect();
     const result = await client.query(
-      'DELETE FROM public."Parties" WHERE party_id = $1 RETURNING *',
+      'DELETE FROM public."parties" WHERE party_id = $1 RETURNING *',
       [partyId]
     );
     const deletedParty = result.rows[0];
